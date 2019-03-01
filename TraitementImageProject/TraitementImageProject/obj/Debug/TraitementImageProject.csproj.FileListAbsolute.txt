@@ -1,0 +1,10 @@
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\bin\Debug\TraitementImageProject.exe.config
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\bin\Debug\TraitementImageProject.exe
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\bin\Debug\TraitementImageProject.pdb
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\obj\Debug\TraitementImageProject.csprojAssemblyReference.cache
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\obj\Debug\TraitementImageProject.Form1.resources
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\obj\Debug\TraitementImageProject.Properties.Resources.resources
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\obj\Debug\TraitementImageProject.csproj.GenerateResource.cache
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\obj\Debug\TraitementImageProject.csproj.CoreCompileInputs.cache
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\obj\Debug\TraitementImageProject.exe
+C:\Users\Ilyes\source\repos\TraitementImageProject\TraitementImageProject\obj\Debug\TraitementImageProject.pdb
