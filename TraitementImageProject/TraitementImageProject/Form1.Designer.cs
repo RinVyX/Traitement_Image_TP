@@ -87,6 +87,7 @@ namespace TraitementImageProject
             this.pictureBox3.TabIndex = 6;
             this.pictureBox3.TabStop = false;
             this.pictureBox3.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox3_Paint);
+            this.pictureBox3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox3_MouseDown);
             // 
             // button_ShowHisto
             // 
