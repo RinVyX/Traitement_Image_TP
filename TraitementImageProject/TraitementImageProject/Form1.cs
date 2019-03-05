@@ -145,5 +145,25 @@ namespace TraitementImageProject
             DrawHistogram(e.Graphics, pictureBox3.BackColor, hist,
          pictureBox3.ClientSize.Width, pictureBox3.ClientSize.Height);
         }
+
+        private void pictureBox3_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (_histogramme == null)
+                return;
+
+            // Determine which data value was clicked.
+            float bar_wid = pictureBox3.ClientSize.Width /
+                (int)_histogramme.Count;
+            int i = (int)(e.X / bar_wid);
+            try
+            {
+                MessageBox.Show("Item " + i + " has value " + _histogramme[i],
+                  "Value", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch
+            {
+                //A négliger
+            }
+        }
     }
 }
