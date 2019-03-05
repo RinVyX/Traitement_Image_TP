@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,24 +14,9 @@ namespace TraitementImageProject
 {
     public partial class Form1 : Form
     {
-        public string F
-        {
-            get { return "HHH"; }
-        }
 
-        public static Form1 Instance
-        {
-            get
-            {
-                if (Instance == null)
-                    Instance = new Form1();
-                return Instance;
-            }
-            set
-            {
-                
-            }
-        }
+        Dictionary<int, int> _histogramme;
+
         public Form1()
         {
             InitializeComponent();
@@ -46,7 +32,8 @@ namespace TraitementImageProject
 
             Bitmap bmapGris = convertirEnNiveauDeGris(bmap);
             pictureBox2.Image = bmapGris;
-            calculHistogramme(bmapGris);
+            _histogramme = calculHistogramme(bmapGris);
+
         }
 
         private Bitmap convertirEnNiveauDeGris(Bitmap imageBitmap)
@@ -57,9 +44,9 @@ namespace TraitementImageProject
 
             int minNG = 255, maxNG = 0;
 
-            for(int i = 0; i < imageBitmap.Width; i++)
+            for (int i = 0; i < imageBitmap.Width; i++)
             {
-                for(int j = 0; j < imageBitmap.Height; j++)
+                for (int j = 0; j < imageBitmap.Height; j++)
                 {
                     c = imageBitmap.GetPixel(i, j);
                     byte gray = (byte)(Math.Min(.299 * c.R + .587 * c.G + .114 * c.B, 255));
@@ -76,30 +63,87 @@ namespace TraitementImageProject
             return bitmapToreturn;
         }
 
-        private void calculHistogramme(Bitmap imageBitmapEnGris)
+        private Dictionary<int, int> calculHistogramme(Bitmap imageBitmapEnGris)
         {
             Color c;
-            int[] histogramme = new int[256];
-
-            for(int i = 0; i < 256; i++)
-            {
-                histogramme[i] = 0;
-            }
-
+            Dictionary<int, int> histogramme = new Dictionary<int, int>();
+            
             for (int w = 0; w < imageBitmapEnGris.Width; w++)
             {
                 for (int h = 0; h < imageBitmapEnGris.Height; h++)
                 {
                     c = imageBitmapEnGris.GetPixel(w, h);
-                    histogramme[(byte)c.R]++;
+                    if (histogramme.ContainsKey((byte)c.R))
+                        histogramme[(byte)c.R]++;
+                    else
+                        histogramme.Add((byte)c.R, 1);
                 }
             }
+            
+            return histogramme;
+        }
+        
+        private void DrawHistogram(Graphics gr, Color back_color, int[] values, int width, int height)
+        {
+            int max_value = 100;
 
-            foreach(int g in histogramme)
-            {
-                textBox_DisplayValues.Text += '-' + g;
-            }
-            //return histogramme;
+            Color[] Colors = new Color[] {
+                Color.Red, Color.LightGreen, Color.Blue,
+                Color.Pink, Color.Green, Color.LightBlue,
+                Color.Orange, Color.Yellow, Color.Purple
+            };
+
+            gr.Clear(back_color);
+            
+            // Make a transformation to the PictureBox.
+            RectangleF data_bounds = new RectangleF(0, 0, values.Length, max_value);
+            PointF[] points = {
+                new PointF(0, height),
+                new PointF(width, height),
+                new PointF(0, 0)
+            };
+                    Matrix transformation = new Matrix(data_bounds, points);
+                    gr.Transform = transformation;
+
+                    // Draw the histogram.
+                    using (Pen thin_pen = new Pen(Color.Black, 0))
+                    {
+                        for (int i = 0; i < values.Length; i++)
+                        {
+                            RectangleF rect = new RectangleF(i, 0, 1, values[i]);
+                            using (Brush the_brush =
+                                new SolidBrush(Colors[i % Colors.Length]))
+                            {
+                                gr.FillRectangle(the_brush, rect);
+                                gr.DrawRectangle(thin_pen, rect.X, rect.Y,
+                                    rect.Width, rect.Height);
+                            }
+                   
+                        }
+                    }
+
+                    gr.ResetTransform();
+                    gr.DrawRectangle(Pens.Black, 0, 0, width - 1, height - 1);
+            
+        }
+
+        private void button_ShowHisto_Click(object sender, EventArgs e)
+        {
+            pictureBox3.Refresh();
+        }
+
+        private void pictureBox3_Paint(object sender, PaintEventArgs e)
+        {
+            if (_histogramme == null)
+                return;
+
+
+            int[] hist = new int[_histogramme.Values.Count]; // Exemple à essayer { 5, 8, 1, 9, 75, 0, 5 };
+
+            _histogramme.Values.CopyTo(hist, 0); // Effacer ceci pour essayer l'exemple
+
+            DrawHistogram(e.Graphics, pictureBox3.BackColor, hist,
+         pictureBox3.ClientSize.Width, pictureBox3.ClientSize.Height);
         }
     }
 }
